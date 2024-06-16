@@ -18,5 +18,3 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engin)
 
 # Create a Base class for our ORM models to inherit from
 Base = declarative_base()
-
-# This is comment
