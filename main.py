@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI, Depends, HTTPException
 import models
 from database import engin, SessionLocal
 from sqlalchemy.orm import Session
@@ -22,3 +22,18 @@ def get_db():
 async def read_all(db: Session = Depends(get_db)):
     # Use the database session to query all records from the todos table
     return db.query(models.Todos).all()
+
+# Endpoint to read a specific todo item by its ID
+@app.get("/todo/{todo_id}")
+async def read_todos(todo_id: int, db: Session = Depends(get_db)):
+    # Endpoint to read a specific todo item by its ID
+    todo_model = db.query(models.Todos)\
+        .filter(models.Todos.id == todo_id)\
+        .first() # Retrieve the first result from the query
+    if todo_model is not None:
+        return todo_model
+    # Raise an HTTP 404 Not Found exception if the todo item was not found
+    raise http_exception()
+
+def http_exception():
+    return HTTPException(status_code=404, detail="Todo not found")
