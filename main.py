@@ -65,6 +65,7 @@ async def create_todo(todo: Todo, db: Session = Depends(get_db)):
         'transaction': 'Successful'
     }
 
+# Update a todo
 @app.put("/{tod_id}")
 async def update_todos(todo_id: int, todo: Todo, db: Session = Depends(get_db)):
     todo_model = db.query(models.Todos)\
@@ -87,8 +88,25 @@ async def update_todos(todo_id: int, todo: Todo, db: Session = Depends(get_db)):
         'transaction': 'Successful'
     }
 
+# Delete a todo
+@app.delete("/{todo_id}")
+async def delete_todo(todo_id: int, db: Session = Depends(get_db)):
+    todo_model = db.query(models.Todos).filter(models.Todos.id == todo_id).first()
 
+    if todo_model is None:
+        raise http_exception()
 
+    db.query(models.Todos).filter(models.Todos == todo_id).delete()
+
+    db.commit()
+
+    return successful_response(200)
+
+def successful_response(status_code: int):
+    return {
+        'status': status_code,
+        'transaction': 'Successful'
+    }
 
 def http_exception():
     return HTTPException(status_code=404, detail="Todo not found")
