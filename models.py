@@ -14,7 +14,17 @@ class Users(Base):
     hashed_password = Column(String)
     is_active = Column(Boolean, default=True)
 
+    # Define a relationship to the Todos table, with back_populates specifying the inverse relationship
     todos = relationship("Todos", back_populates="owner")
+    """
+        The 'todos' attribute establishes a relationship between the Users and Todos tables.
+        It allows each Users instance to have a collection of related Todos instances.
+
+        Parameters:
+        - "Todos": The related class representing the Todos table.
+        - back_populates="owner": Sets up a bidirectional relationship.
+          This means the Todos class will have a corresponding 'owner' attribute that links back to the Users class.
+        """
 
 
 # Define the Todos model which maps to the "todos" table in the database
@@ -29,6 +39,15 @@ class Todos(Base):
     description = Column(String)
     priority = Column(Integer)
     complete = Column(Boolean, default=False)
-    owner_id = Column(Integer, ForeignKey("user.id"))
+    owner_id = Column(Integer, ForeignKey("users.id"))
 
     owner = relationship("Users", back_populates="todos")
+    """
+        The 'owner' attribute establishes a relationship between the Todos and Users tables.
+        It allows each Todos instance to be linked back to a specific Users instance.
+
+        Parameters:
+        - "Users": The related class representing the Users table.
+        - back_populates="todos": Sets up a bidirectional relationship.
+          This means the Users class will have a corresponding 'todos' attribute that links to the Todos class.
+        """
