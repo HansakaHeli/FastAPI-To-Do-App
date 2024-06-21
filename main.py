@@ -40,12 +40,19 @@ async def read_all_by_user(user: dict = Depends(get_current_user), db: Session =
         raise get_user_exception()
     return db.query(models.Todos).filter(models.Todos.owner_id == user.get("id")).all()
 
-# Endpoint to read a specific todo item by its ID
+# Endpoint to read a specific todo item by its ID + UserID
 @app.get("/todo/{todo_id}")
-async def read_todos(todo_id: int, db: Session = Depends(get_db)):
+async def read_todos(todo_id: int,
+                     user: dict = Depends(get_current_user),
+                     db: Session = Depends(get_db)):
+
+    if user is None:
+        raise get_user_exception()
+
     # Endpoint to read a specific todo item by its ID
     todo_model = db.query(models.Todos)\
         .filter(models.Todos.id == todo_id)\
+        .filter(models.Todos.owner_id == user.get("id"))\
         .first() # Retrieve the first result from the query
     if todo_model is not None:
         return todo_model
