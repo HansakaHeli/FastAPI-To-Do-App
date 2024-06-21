@@ -5,13 +5,16 @@ import models
 from database import engin, SessionLocal
 from sqlalchemy.orm import Session
 from pydantic import BaseModel, Field
-from auth import get_current_user, get_user_exception
+from routers.auth import get_current_user, get_user_exception
+from routers import auth
 
 app = FastAPI()
 
 # Create all tables in the database which are defined in the models module
 # The "bind=engin" argument tells SQLAlchemy to use the provided engine for creating tables
 models.Base.metadata.create_all(bind=engin)
+
+app.include_router(auth.router)
 
 # Function to provide a database session
 def get_db():
