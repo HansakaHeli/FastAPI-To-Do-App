@@ -3,12 +3,12 @@ from sqlalchemy.orm import sessionmaker # Import sessionmaker to create a new se
 from sqlalchemy.ext.declarative import declarative_base # Import declarative_base for the base class for ORM models
 
 # Database URL, replace with your actual database URL
-SQLALCHEMY_DATABASE_URL = "sqlite:///./todos.db"
+SQLALCHEMY_DATABASE_URL = "mysql+pymysql://root:@127.0.0.1:3306/fastapi_todo"
 
 # Create a SQLAlchemy engine instance
 # `connect_args={"check_same_thread": False}` is used for SQLite to allow multiple threads to interact with the database
 engin = create_engine(
-    SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False}
+    SQLALCHEMY_DATABASE_URL
 )
 
 # Create a configured "Session" class
