@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Depends
 import models
 from database import engin
-from routers import auth, todos
+from routers import auth, todos, address
 from company import companyapis, dependencies
 
 app = FastAPI()
@@ -12,6 +12,7 @@ models.Base.metadata.create_all(bind=engin)
 
 app.include_router(auth.router)
 app.include_router(todos.router)
+app.include_router(address.router)
 app.include_router(
     companyapis.router,
     prefix="/companyapis",
