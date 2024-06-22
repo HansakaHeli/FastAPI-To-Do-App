@@ -13,6 +13,8 @@ class Users(Base):
     last_name = Column(String)
     hashed_password = Column(String)
     is_active = Column(Boolean, default=True)
+    phone_number = Column(String)
+    address_id = Column(Integer, ForeignKey("address_id"), nullable=True)
 
     # Define a relationship to the Todos table, with back_populates specifying the inverse relationship
     todos = relationship("Todos", back_populates="owner")
@@ -25,6 +27,7 @@ class Users(Base):
         - back_populates="owner": Sets up a bidirectional relationship.
           This means the Todos class will have a corresponding 'owner' attribute that links back to the Users class.
         """
+    address = relationship("Address", back_populates="user_address")
 
 
 # Define the Todos model which maps to the "todos" table in the database
@@ -51,3 +54,17 @@ class Todos(Base):
         - back_populates="todos": Sets up a bidirectional relationship.
           This means the Users class will have a corresponding 'todos' attribute that links to the Todos class.
         """
+
+class Address(Base):
+
+    __tablename__ = "address"
+
+    id = Column(Integer, primary_key=True, index=True)
+    address1 = Column(String)
+    address2 = Column(String)
+    city = Column(String)
+    state = Column(String)
+    country = Column(String)
+    postalcode = Column(String)
+
+    user_address = relationship("Users", back_populates="address")
