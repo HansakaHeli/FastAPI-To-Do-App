@@ -55,6 +55,7 @@ class Todos(Base):
           This means the Users class will have a corresponding 'todos' attribute that links to the Todos class.
         """
 
+# Address model
 class Address(Base):
 
     __tablename__ = "address"
